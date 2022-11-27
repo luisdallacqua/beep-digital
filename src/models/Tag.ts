@@ -8,7 +8,7 @@ export interface ITag {
 export interface ITagModel extends ITag, Document {}
 
 const TagSchema: Schema = new Schema({
-    name: { type: String, required: true, unique: true },
+    name: { type: String, lowercase: true, required: true, unique: true },
     videos: [{ type: Schema.Types.ObjectId, ref: 'Video' }]
 });
 

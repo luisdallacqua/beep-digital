@@ -5,6 +5,7 @@ import { config } from './config/config';
 import Logging from './library/Logging';
 import videoRoutes from './routes/Video';
 import tagRoutes from './routes/Tag';
+import userRoutes from './routes/User';
 
 const router = express();
 
@@ -53,6 +54,7 @@ const StartServer = () => {
     /**Routes */
     router.use('/videos', videoRoutes);
     router.use('/tags', tagRoutes);
+    router.use('/users', userRoutes);
 
     /**Error handling */
     router.use((req, res, next) => {
