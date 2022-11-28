@@ -62,7 +62,8 @@
     -   O campo password tem que ter o tamanho mínimo de 6 caracteres;
 
 <p><strong>Vídeo demonstrando funcionamento da API</strong></p>
-<div style="position: relative; padding-bottom: 54.6875%; height: 0;"><iframe src="https://www.loom.com/embed/65f3e456f2654ab69abb8fd0bce88f95" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+[Loom video](https://www.loom.com/share/65f3e456f2654ab69abb8fd0bce88f95)
 
 #### Como rodar o projeto depois de cloná-lo
 
