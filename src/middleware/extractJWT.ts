@@ -24,7 +24,7 @@ const extractJWT = (req: Request, res: Response, next: NextFunction) => {
         });
     } else {
         return res.status(401).json({
-            message: 'Unauthorized'
+            message: 'Unauthorized access'
         });
     }
 };

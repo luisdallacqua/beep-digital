@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IVideo {
     video_url: string;
-    tag: string[];
+    tags: string[];
     description: string;
 }
 
@@ -13,11 +13,11 @@ const VideoSchema: Schema = new Schema({
         type: String,
         lowercase: true,
         unique: true,
-        required: [true, 'este é um campo obrigatório'],
-        minLength: [6, 'Tamanho mínimo é 6']
+        required: [true, 'this is a required field'],
+        minLength: [10, 'The minimum size of description is']
     },
-    video_url: { type: String, required: [true, 'este é um campo obrigatório'], unique: true },
-    tag: [
+    video_url: { type: String, required: [true, 'this is a required field'], unique: true },
+    tags: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Tag'

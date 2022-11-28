@@ -18,26 +18,20 @@ export const ValidateSchema = (schema: ObjectSchema) => {
 };
 
 export const Schemas = {
-    author: {
+    video: {
         create: Joi.object<IVideo>({
-            video_url: Joi.string().required(),
+            video_url: Joi.string()
+                .required()
+                .pattern(/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/),
             description: Joi.string().required(),
-            tag: Joi.array().items(Joi.string())
+            tags: Joi.array().items(Joi.string())
         }),
         update: Joi.object<IVideo>({
-            video_url: Joi.string().required(),
+            video_url: Joi.string()
+                .required()
+                .pattern(/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/),
             description: Joi.string().required(),
-            tag: Joi.array().items(Joi.string())
-        })
-    },
-    book: {
-        create: Joi.object<ITag>({
-            name: Joi.string().required(),
-            videos: Joi.array().items(Joi.string())
-        }),
-        update: Joi.object<ITag>({
-            name: Joi.string().required(),
-            videos: Joi.array().items(Joi.string())
+            tags: Joi.array().items(Joi.string())
         })
     }
 };

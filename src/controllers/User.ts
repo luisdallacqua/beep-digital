@@ -1,19 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Logging from '../library/Logging';
 import User from '../models/User';
 import bcryptjs from 'bcryptjs';
 import signJWT from '../helpers/signJWT';
+import { config } from '../config/config';
 
 const NAMESPACE = 'Users';
-
-const validateToken = (req: Request, res: Response) => {
-    Logging.info(`${NAMESPACE} Token validated, user authorized`);
-
-    return res.status(200).json({
-        message: 'Authorized'
-    });
-};
 
 const register = (req: Request, res: Response) => {
     let { username, password } = req.body;
@@ -43,33 +36,40 @@ const login = (req: Request, res: Response) => {
 
     return User.findOne({ username })
         .then((user) => {
-            user
-                ? bcryptjs.compare(password, user?.password || '', (error, result) => {
-                      if (error) {
-                          Logging.error(`${NAMESPACE}, ${error.message}`);
+            if (!user) {
+                res.status(404).json({ message: 'User not found' });
+            } else {
+                bcryptjs.compare(password, user.password || '', (error, result) => {
+                    if (error) {
+                        Logging.error(`${NAMESPACE}, ${error.message}`);
 
-                          return res.status(401).json({
-                              message: 'Unauthorized'
-                          });
-                      } else if (result) {
-                          signJWT(user, (error, token) => {
-                              if (error) {
-                                  Logging.error(`${NAMESPACE}, "Unable to sign token", ${error.message}`);
-                                  return res.status(401).json({
-                                      message: 'Unauthorized',
-                                      error: error.message
-                                  });
-                              } else if (token) {
-                                  return res.status(200).json({
-                                      message: 'Auth successful',
-                                      token,
-                                      user
-                                  });
-                              }
-                          });
-                      }
-                  })
-                : res.status(404).json({ message: 'not found the user' });
+                        return res.status(401).json({
+                            message: 'Unauthorized'
+                        });
+                    } else if (result) {
+                        signJWT(user, (error, token) => {
+                            if (error) {
+                                Logging.error(`${NAMESPACE}, "Unable to sign token", ${error.message}`);
+
+                                return res.status(401).json({
+                                    message: 'Unauthorized',
+                                    error: error.message
+                                });
+                            } else if (token) {
+                                return res
+                                    .cookie('jwt', token, { httpOnly: true, maxAge: Number(config.server.token.expireTime) * 60 * 60 * 24 * 1000 })
+                                    .status(200)
+                                    .json({
+                                        message: 'Login auth successful',
+                                        user: {
+                                            username: user.username
+                                        }
+                                    });
+                            }
+                        });
+                    }
+                });
+            }
         })
         .catch((error) => res.status(500).json({ message: error.message, error }));
 };
@@ -87,4 +87,4 @@ const getAllUsers = (req: Request, res: Response) => {
         .catch((error) => res.status(500).json({ message: error.message, error }));
 };
 
-export default { validateToken, register, login, getAllUsers };
+export default { register, login, getAllUsers };

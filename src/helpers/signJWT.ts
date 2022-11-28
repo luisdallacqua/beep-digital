@@ -6,9 +6,6 @@ import { IUser } from '../models/User';
 const NAMESPACE = 'Auth Sign In';
 
 const signJWT = (user: IUser, callback: (error: Error | null, token: string | null) => void): void => {
-    let timeSinceEpoc = new Date().getTime();
-    let expirationTimeInSeconds = timeSinceEpoc + Number(config.server.token.expireTime) * 10;
-
     Logging.info(`${NAMESPACE} Attempting to sign token for ${user.username}`);
 
     try {
@@ -18,7 +15,7 @@ const signJWT = (user: IUser, callback: (error: Error | null, token: string | nu
             {
                 issuer: config.server.token.issuer,
                 algorithm: 'HS256',
-                expiresIn: expirationTimeInSeconds
+                expiresIn: `${config.server.token.expireTime} days`
             },
             (error, token) => {
                 if (error) {
